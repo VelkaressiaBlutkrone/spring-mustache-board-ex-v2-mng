@@ -52,7 +52,7 @@ public class BoardController {
         req.setAttribute("paging", new PagingDto(boards, searchType, keyword)); // 페이징 네비게이션 정보
         req.setAttribute("searchType", searchType); // 검색 유형 (검색폼 복원용)
         req.setAttribute("keyword", keyword); // 검색 키워드 (검색폼 복원용)
-        return "/";
+        return "/board/list";
     }
 
     /** 게시글 상세 페이지를 조회한다. */

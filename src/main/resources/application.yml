@@ -73,6 +73,16 @@ spring:
       expose-session-attributes: true
       expose-request-attributes: true
 
+  # ===========================================
+  # 에러 페이지 설정 (Spring Boot 4.0+)
+  # - include-message=always : 에러 메시지를 항상 포함 (기본값 never)
+  # - include-exception=false : 예외 클래스명 노출 방지 (보안)
+  # ===========================================
+  web:
+    error:
+      include-message: always
+      include-exception: false
+
 # ===========================================
 # 파일 업로드 저장 경로 설정
 # - upload-dir : 업로드 파일 저장 경로 (프로젝트 루트/uploads/)

@@ -18,6 +18,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import com.example.v2.filter.JwtAuthenticationFilter;
+import com.example.v2.util.JwtUtil;
 
 import lombok.RequiredArgsConstructor;
 
@@ -27,7 +28,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-    private final JwtAuthenticationFilter jwtAuthenticationFilter;
+    private final JwtUtil jwtUtil;
     private final UserDetailsService userDetailsService;
 
     /**
@@ -76,12 +77,14 @@ public class SecurityConfig {
                         .requestMatchers(
                                 "/api/auth/**", // 인증 관련 엔드포인트
                                 "/h2-console/**", // H2 데이터베이스 콘솔
-                                "/error" // 에러 페이지
-                        ).permitAll()
+                                "/error", // 에러 페이지
+                                "/favicon.ico", // 브라우저 기본 아이콘 요청
+                                "/css/**", "/js/**", "/images/**", // 정적 리소스
+                                "/")
+                        .permitAll()
 
                         // ADMIN 권한이 필요한 경로
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")
-
                         // 그 외 모든 요청은 인증 필요
                         .anyRequest().authenticated())
 
@@ -93,7 +96,10 @@ public class SecurityConfig {
                 .authenticationProvider(authenticationProvider())
 
                 // JWT 인증 필터를 UsernamePasswordAuthenticationFilter 이전에 추가
-                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+                // JWT 필터를 @Bean으로 등록하지 않고 인라인으로 생성하여
+                // Spring Boot의 서블릿 필터 자동 등록(이중 등록) 방지
+                .addFilterBefore(new JwtAuthenticationFilter(jwtUtil, userDetailsService),
+                        UsernamePasswordAuthenticationFilter.class)
 
                 // H2 콘솔 사용을 위한 설정
                 .headers(headers -> headers

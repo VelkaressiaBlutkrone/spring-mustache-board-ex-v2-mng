@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 import com.example.v2.exception.exs.BoardNotFoundException;
 import com.example.v2.exception.exs.DuplicateTitleException;
@@ -74,6 +75,19 @@ public class GlobalExceptionHandler {
                     .body(Map.of("error", ex.getMessage()));
         }
         req.setAttribute("status", "409 Conflict");
+        req.setAttribute("message", ex.getMessage());
+        return "error";
+    }
+
+    /** 정적 리소스를 찾을 수 없을 때 (404) - favicon.ico 등 */
+    @ExceptionHandler(NoResourceFoundException.class)
+    public Object handleNoResourceFound(NoResourceFoundException ex, HttpServletRequest req) {
+        // favicon.ico 등 불필요한 리소스 요청은 조용히 404 반환
+        if (isApiRequest(req)) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(Map.of("error", ex.getMessage()));
+        }
+        req.setAttribute("status", "404 Not Found");
         req.setAttribute("message", ex.getMessage());
         return "error";
     }

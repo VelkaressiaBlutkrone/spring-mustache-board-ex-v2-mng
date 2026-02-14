@@ -1,13 +1,13 @@
 package com.example.v2.filter;
 
 import java.io.IOException;
+import java.util.List;
 
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
-import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import com.example.v2.util.JwtUtil;
@@ -18,12 +18,30 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 
-@Component
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtUtil jwtUtil;
     private final UserDetailsService userDetailsService;
+
+    // JWT 인증을 건너뛸 공개 경로 목록
+    private static final List<String> PUBLIC_PATHS = List.of(
+            "/api/auth/", "/h2-console", "/error", "/favicon.ico",
+            "/css/", "/js/", "/images/", "/");
+
+    /**
+     * 공개 경로는 JWT 필터를 건너뛴다
+     */
+    @Override
+    protected boolean shouldNotFilter(HttpServletRequest request) {
+        String path = request.getRequestURI();
+        return PUBLIC_PATHS.stream().anyMatch(publicPath -> {
+            if (publicPath.equals("/")) {
+                return path.equals("/");
+            }
+            return path.startsWith(publicPath);
+        });
+    }
 
     /**
      * 요청마다 실행되는 필터 로직
