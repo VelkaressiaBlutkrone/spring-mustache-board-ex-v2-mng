@@ -18,10 +18,10 @@ import org.springframework.web.multipart.MultipartFile;
 import com.example.v2.board.dto.Base64Dto;
 import com.example.v2.board.dto.RequestDto;
 import com.example.v2.board.entity.Board;
-import com.example.v2.board.exception.exs.BoardNotFoundException;
-import com.example.v2.board.exception.exs.DuplicateTitleException;
-import com.example.v2.board.exception.exs.FileUploadException;
 import com.example.v2.board.repository.BoardRepository;
+import com.example.v2.exception.exs.BoardNotFoundException;
+import com.example.v2.exception.exs.DuplicateTitleException;
+import com.example.v2.exception.exs.FileUploadException;
 
 import lombok.RequiredArgsConstructor;
 

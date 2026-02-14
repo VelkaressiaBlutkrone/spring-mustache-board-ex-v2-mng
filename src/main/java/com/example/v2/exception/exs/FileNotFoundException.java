@@ -1,4 +1,4 @@
-package com.example.board.exception.exs;
+package com.example.v2.exception.exs;
 
 /**
  * 업로드된 파일을 서버에서 찾을 수 없을 때 발생하는 예외.

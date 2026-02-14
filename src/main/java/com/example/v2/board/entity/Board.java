@@ -1,4 +1,4 @@
-package com.example.board.entity;
+package com.example.v2.board.entity;
 
 import java.time.LocalDateTime;
 
@@ -24,9 +24,9 @@ import lombok.NoArgsConstructor;
  * Lombok 어노테이션으로 보일러플레이트 코드를 줄인다.
  *
  * - @AllArgsConstructor : 모든 필드를 매개변수로 받는 생성자 자동 생성
- * - @NoArgsConstructor  : 기본 생성자 자동 생성 (JPA 스펙에서 필수)
- * - @Builder            : 빌더 패턴을 사용한 객체 생성 지원
- * - @Getter             : 모든 필드의 getter 메서드 자동 생성
+ * - @NoArgsConstructor : 기본 생성자 자동 생성 (JPA 스펙에서 필수)
+ * - @Builder : 빌더 패턴을 사용한 객체 생성 지원
+ * - @Getter : 모든 필드의 getter 메서드 자동 생성
  */
 @Entity
 @Table(name = "board")

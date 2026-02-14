@@ -1,4 +1,4 @@
-package com.example.board.dto;
+package com.example.v2.board.dto;
 
 import java.util.ArrayList;
 import java.util.List;

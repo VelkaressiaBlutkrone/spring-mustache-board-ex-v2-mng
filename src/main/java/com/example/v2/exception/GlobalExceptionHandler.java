@@ -1,4 +1,4 @@
-package com.example.v2.board.exception;
+package com.example.v2.exception;
 
 import java.util.Map;
 
@@ -7,10 +7,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
-import com.example.v2.board.exception.exs.BoardNotFoundException;
-import com.example.v2.board.exception.exs.DuplicateTitleException;
-import com.example.v2.board.exception.exs.FileNotFoundException;
-import com.example.v2.board.exception.exs.FileUploadException;
+import com.example.v2.exception.exs.BoardNotFoundException;
+import com.example.v2.exception.exs.DuplicateTitleException;
+import com.example.v2.exception.exs.FileNotFoundException;
+import com.example.v2.exception.exs.FileUploadException;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;

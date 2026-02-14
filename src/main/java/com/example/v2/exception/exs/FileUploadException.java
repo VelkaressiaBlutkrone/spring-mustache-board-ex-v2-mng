@@ -1,4 +1,4 @@
-package com.example.board.exception.exs;
+package com.example.v2.exception.exs;
 
 /**
  * 파일 업로드 처리 중 발생하는 예외.

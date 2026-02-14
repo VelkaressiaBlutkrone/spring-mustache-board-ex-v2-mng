@@ -1,4 +1,4 @@
-package com.example.board.exception.exs;
+package com.example.v2.exception.exs;
 
 /**
  * 중복된 제목으로 게시글을 저장하려 할 때 발생하는 예외.

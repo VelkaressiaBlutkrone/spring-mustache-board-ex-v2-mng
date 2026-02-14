@@ -1,0 +1,93 @@
+# ===========================================
+# 애플리케이션 이름
+# ===========================================
+spring:
+  application:
+    name: spring-mustache-board-example
+
+  # ===========================================
+  # H2 인메모리 데이터베이스 설정
+  # - mem:boarddb : 인메모리 모드로 동작 (애플리케이션 종료 시 데이터 삭제)
+  # - sa / (빈 비밀번호) : H2 기본 계정
+  # ===========================================
+  datasource:
+    url: jdbc:h2:mem:boarddb
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+
+  # ===========================================
+  # H2 웹 콘솔 설정
+  # - enabled=true : 브라우저에서 DB 를 직접 조회할 수 있는 콘솔 활성화
+  # - path=/h2-console : http://localhost:8080/h2-console 로 접속
+  # ===========================================
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+
+  # ===========================================
+  # JPA / Hibernate 설정
+  # - ddl-auto=create : 애플리케이션 시작 시 엔티티 기반으로 테이블을 새로 생성
+  #   (운영 환경에서는 validate 또는 none 권장)
+  # - show-sql=true : 실행되는 SQL 쿼리를 콘솔에 출력
+  # - format_sql=true : 출력되는 SQL 을 보기 좋게 포맷팅
+  # ===========================================
+  jpa:
+    hibernate:
+      ddl-auto: create
+    defer-datasource-initialization: true
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+
+  # ===========================================
+  # SQL 초기화 설정
+  # - mode=always : 애플리케이션 시작 시 data.sql 자동 실행
+  # - data-locations : 테스트 데이터 SQL 파일 경로
+  # ===========================================
+  sql:
+    init:
+      mode: always
+      data-locations: classpath:data/test_data.sql
+
+  # ===========================================
+  # 파일 업로드 설정
+  # - max-file-size : 단일 파일 최대 크기 (10MB)
+  # - max-request-size : 전체 요청 최대 크기 (10MB)
+  # ===========================================
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+
+  # ===========================================
+  # Mustache 템플릿 엔진 설정
+  # - expose-session-attributes : HttpSession 의 attribute 를 템플릿에서 접근 가능
+  # - expose-request-attributes : HttpServletRequest 의 attribute 를 템플릿에서 접근 가능
+  #   (컨트롤러에서 req.setAttribute() 로 세팅한 값을 {{ 변수명 }} 으로 사용)
+  # ===========================================
+  mustache:
+    servlet:
+      expose-session-attributes: true
+      expose-request-attributes: true
+
+# ===========================================
+# 파일 업로드 저장 경로 설정
+# - upload-dir : 업로드 파일 저장 경로 (프로젝트 루트/uploads/)
+# ===========================================
+file:
+  upload-dir: ${user.dir}/uploads/
+
+# ===========================================
+# JWT 설정
+# - secret : JWT 토큰 서명에 사용할 비밀 키 (256bits 이상)
+# - expiration : Access Token 만료 시간 (24시간, 밀리초)
+# - refresh-expiration : Refresh Token 만료 시간 (7일, 밀리초)
+# - node -e "console.log(require('crypto').randomBytes(32).toString('hex'))" : 비밀 키 생성
+# ===========================================
+jwt:
+  secret: a347d448b111a6ae5212cccc43b29c4fbfeffa0e490279a17115d33c910247d2
+  expiration: 86400000
+  refresh-expiration: 604800000
