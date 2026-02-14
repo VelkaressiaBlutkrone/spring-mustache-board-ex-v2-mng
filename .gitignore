@@ -1,0 +1,50 @@
+# Build
+.gradle/
+build/
+
+# Spring Boot
+HELP.md
+
+# Uploads (file.upload-dir)
+uploads/
+
+# Logs
+*.log
+logs/
+
+# Local config
+application-local.properties
+application-local.yml
+
+# OS
+.DS_Store
+Thumbs.db
+
+### IDE ###
+
+# IntelliJ IDEA
+.idea/
+*.iws
+*.iml
+*.ipr
+out/
+
+# Eclipse / STS
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings/
+.springBeans
+.sts4-cache
+bin/
+
+# NetBeans
+nbproject/private/
+nbbuild/
+dist/
+nbdist/
+.nb-gradle/
+
+# VS Code
+.vscode/

@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>게시판</title>
+    <style>
+      body {
+        font-family: sans-serif;
+        max-width: 800px;
+        margin: 40px auto;
+        padding: 0 20px;
+      }
+      .search {
+        display: flex;
+        gap: 5px;
+        margin-bottom: 15px;
+      }
+      .search select,
+      .search input {
+        padding: 6px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+      }
+      .search input {
+        flex: 1;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 10px;
+      }
+      th,
+      td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: center;
+      }
+      th {
+        background: #f5f5f5;
+      }
+      td a {
+        color: #007bff;
+        text-decoration: none;
+      }
+      .paging {
+        display: flex;
+        justify-content: center;
+        gap: 3px;
+        margin-top: 15px;
+      }
+      .paging a,
+      .paging span {
+        padding: 5px 10px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        text-decoration: none;
+        color: #333;
+      }
+      .paging .on {
+        background: #007bff;
+        color: white;
+        border-color: #007bff;
+      }
+      .paging .off {
+        color: #ccc;
+        pointer-events: none;
+      }
+      .bar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .btn-blue {
+        padding: 7px 16px;
+        background: #007bff;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        text-decoration: none;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>게시판</h1>
+
+    <!-- 검색 폼: 제목/작성자/제목+내용 검색 지원 -->
+    <form class="search" action="/" method="get">
+      <select name="searchType">
+        <option value="title">제목</option>
+        <option value="writer">작성자</option>
+        <option value="titleContent">제목+내용</option>
+      </select>
+
+      <!-- 검색 후 입력값 유지 -->
+      <input
+        type="text"
+        name="keyword"
+        value="{{ keyword }}"
+        placeholder="검색어"
+      />
+      <button class="btn-blue">검색</button>
+    </form>
+
+    <!-- 총 건수 표시 및 글쓰기 버튼 -->
+    <div class="bar">
+      <!-- {{ totalElements }}: 전체 게시글 수 (Page.getTotalElements()) -->
+      <span>총 {{ totalElements }}건</span>
+      <a href="/board/write" class="btn-blue">글쓰기</a>
+    </div>
+
+    <!-- 게시글 테이블 -->
+    {{^boards}}
+    <p style="text-align: center; color: #888; padding: 30px">
+      게시글이 없습니다.
+    </p>
+    {{/boards}}
+    {{#boards}}
+    {{#-first}}
+    <table>
+      <thead>
+        <tr>
+          <th>번호</th>
+          <th>제목</th>
+          <th>작성자</th>
+          <th>조회</th>
+          <th>작성일</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{/-first}}
+        <tr>
+          <td>{{ id }}</td>
+          <td style="text-align: left">
+            <a href="/board/detail/{{ id }}"> {{ title }}</a>
+          </td>
+          <td>{{ writer }}</td>
+          <td>{{ viewCount }}</td>
+          <td>{{ createdAt }}</td>
+        </tr>
+        {{#-last}}
+      </tbody>
+    </table>
+    {{/-last}}
+    {{/boards}}
+
+    <!-- 페이징 네비게이션 -->
+    {{#paging}}
+    {{#totalPages}}
+    <div class="paging">
+      <!-- 처음 버튼 -->
+      {{#first}}<span class="off">처음</span>{{/first}}
+      {{^first}}<a href="/?page=0&searchType={{ searchType }}&keyword={{ keyword }}">처음</a>{{/first}}
+
+      <!-- 이전 버튼 -->
+      {{#first}}<span class="off">이전</span>{{/first}}
+      {{^first}}<a href="/?page={{ prevPage }}&searchType={{ searchType }}&keyword={{ keyword }}">이전</a>{{/first}}
+
+      <!-- 페이지 번호 목록 -->
+      {{#pageNumbers}}
+      {{#active}}<span class="on">{{ displayNumber }}</span>{{/active}}
+      {{^active}}<a href="/?page={{ pageIndex }}&searchType={{ searchType }}&keyword={{ keyword }}">{{ displayNumber }}</a>{{/active}}
+      {{/pageNumbers}}
+
+      <!-- 다음 버튼 -->
+      {{#last}}<span class="off">다음</span>{{/last}}
+      {{^last}}<a href="/?page={{ nextPage }}&searchType={{ searchType }}&keyword={{ keyword }}">다음</a>{{/last}}
+
+      <!-- 마지막 버튼 -->
+      {{#last}}<span class="off">마지막</span>{{/last}}
+      {{^last}}<a href="/?page={{ lastPage }}&searchType={{ searchType }}&keyword={{ keyword }}">마지막</a>{{/last}}
+    </div>
+    {{/totalPages}}
+    {{/paging}}
+  </body>
+  <script>
+    // 검색 유형 복원
+    const t = "{{searchType}}";
+    if (t) document.querySelector('select[name="searchType"]').value = t;
+  </script>
+</html>

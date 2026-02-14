@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>글쓰기</title>
+    <style>
+      body {
+        font-family: sans-serif;
+        max-width: 600px;
+        margin: 40px auto;
+        padding: 0 20px;
+      }
+      input[type="text"],
+      textarea {
+        width: 100%;
+        padding: 8px;
+        margin: 5px 0 15px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+      }
+      textarea {
+        height: 200px;
+      }
+      label {
+        font-weight: bold;
+      }
+      button,
+      .btn {
+        padding: 8px 20px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        text-decoration: none;
+        color: white;
+      }
+      .btn-blue {
+        background: #007bff;
+      }
+      .btn-gray {
+        background: #6c757d;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>글쓰기</h1>
+
+    <!-- 게시글 작성 폼: 폼 등록 또는 Fetch 등록 -->
+    <form action="/board/write" method="post" enctype="multipart/form-data">
+      <label>제목</label>
+      <input id="txtTitle" type="text" name="title" required maxlength="50" />
+      <label>작성자</label>
+      <input id="txtWriter" type="text" name="writer" required maxlength="50" />
+      <label>내용</label>
+      <textarea id="txtContent" name="content" required></textarea>
+      <label>첨부파일 (이미지)</label>
+      <input id="fileUploadInput" type="file" name="file" accept="image/*" />
+      <br /><br />
+      <button type="submit" class="btn-blue">폼 등록</button>
+      <button id="btnSubmit2" type="submit" class="btn-blue">Fetch 등록</button>
+      <a href="/" class="btn btn-gray">목록</a>
+    </form>
+
+    <script>
+      const title = document.querySelector("#txtTitle");
+      const writer = document.querySelector("#txtWriter");
+      const content = document.querySelector("#txtContent");
+      const fileUpload = document.querySelector("#fileUploadInput");
+      const btnSubmit = document.querySelector("#btnSubmit2");
+
+      // Fetch 등록 버튼 클릭 시
+      btnSubmit.addEventListener("click", (e) => {
+        uploadFile();
+        e.preventDefault();
+      });
+
+      // 파일 선택 시 Base64 변환 미리보기
+      fileUpload.addEventListener("change", async (e) => {
+        const file = e.target.files[0];
+        const base64 = await fileToBase64(file);
+        console.log(base64);
+      });
+
+      /** File 객체를 Base64 문자열로 변환한다. */
+      function fileToBase64(file) {
+        return new Promise((resolve, reject) => {
+          const reader = new FileReader();
+
+          reader.onload = () => {
+            const base64 = reader.result.split(",")[1];
+            resolve(base64);
+          };
+
+          reader.onerror = reject;
+          reader.readAsDataURL(file);
+        });
+      }
+
+      /** Fetch API로 게시글을 JSON으로 서버에 전송한다. */
+      async function uploadFile() {
+        const file = fileUpload.files[0];
+        if (!file) {
+          alert("이미지가 선택되지 않았습니다.");
+          return;
+        }
+
+        const base64 = await fileToBase64(file);
+
+        const json = {
+          imageFileName: file.name,
+          imageBase64: base64,
+          title: title.value,
+          content: content.value,
+          writer: writer.value,
+        };
+
+        const response = await fetch("/board/api/write", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(json),
+        });
+
+        if (response.redirected) {
+          window.location.href = response.url;
+        }
+      }
+    </script>
+  </body>
+</html>

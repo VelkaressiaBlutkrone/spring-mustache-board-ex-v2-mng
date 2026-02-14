@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>상세보기</title>
+    <style>
+      body {
+        font-family: sans-serif;
+        max-width: 600px;
+        margin: 40px auto;
+        padding: 0 20px;
+      }
+      .info {
+        color: #666;
+        margin-bottom: 15px;
+      }
+      .content {
+        min-height: 150px;
+        padding: 15px;
+        background: #fafafa;
+        borderradius: 4px;
+        white-space: pre-wrap;
+      }
+      img {
+        max-width: 100%;
+        margin-top: 15px;
+        border-radius: 4px;
+      }
+      .btn-gray {
+        display: inline-block;
+        margin-top: 20px;
+        padding: 8px 20px;
+        background: #6c757d;
+        color: white;
+        border-radius: 4px;
+        text-decoration: none;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- 게시글 상세 페이지 -->
+
+    <h1>{{ board.title }}</h1>
+
+    <div class="info">
+      {{ board.writer }} | 조회 {{ board.viewCount }} | {{ board.createdAt }}
+    </div>
+
+    <div class="content">{{ board.content }}</div>
+
+    <!-- 첨부파일 표시 -->
+    {{#board.fileName}}
+    <p><b>첨부:</b> {{ board.originalFileName }}</p>
+    {{#board.profileImage}}
+      <img src="data:image/png;base64,{{ board.profileImage }}" alt="첨부이미지" />
+    {{/board.profileImage}}
+    {{^board.profileImage}}
+      <img src="/images/{{ board.fileName }}" alt="첨부이미지" />
+    {{/board.profileImage}}
+    {{/board.fileName}}
+    <br />
+
+    <a href="/" class="btn-gray">목록으로</a>
+  </body>
+</html>
