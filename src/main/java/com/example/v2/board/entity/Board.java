@@ -10,7 +10,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Lob;
-import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -63,8 +62,9 @@ public class Board {
     private String originalFileName;
 
     /** 조회수 */
+    @Builder.Default
     @Column(name = "view_count")
-    private Long viewCount;
+    private Long viewCount = 0L;
 
     /** Base64 인코딩된 프로필/첨부 이미지 문자열 */
     @Column(name = "profile_image")
@@ -85,14 +85,6 @@ public class Board {
     public void setFileInfo(String fileName, String originalFileName) {
         this.fileName = fileName;
         this.originalFileName = originalFileName;
-    }
-
-    /** 엔티티 저장 전 조회수를 초기화한다. */
-    @PrePersist
-    public void defViewCount() {
-        if (viewCount == null) {
-            viewCount = 0L;
-        }
     }
 
 }
